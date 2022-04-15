@@ -1,0 +1,5 @@
+0 Melanoma
+1 Psoriasis
+2 Rosacea
+3 Vitiligo
+4 Xanthelasma
