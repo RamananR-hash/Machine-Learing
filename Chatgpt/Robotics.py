@@ -5,7 +5,7 @@ import openai
 import speech_recognition as sr
 r = sr.Recognizer()
 from time import sleep
-openai.api_key = "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"
+openai.api_key = ""#enter your api here
 
 
 with sr.Microphone() as source:
