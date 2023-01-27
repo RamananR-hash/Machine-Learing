@@ -16,11 +16,11 @@ with sr.Microphone() as source:
     print(text)
 
     
-prompt = text
+
 
 completions = openai.Completion.create(
     engine="text-davinci-002",
-    prompt=prompt,
+    prompt=tetx,
     max_tokens=1024,
     n=1,
     stop=None,
@@ -32,16 +32,11 @@ message=str(message.strip())
 
 
 print(message)
-tts=message
 
 language = 'en'  
-obj = gTTS(text=tts, lang=language, slow=False)   
+obj = gTTS(text=message, lang=language, slow=False)   
 obj.save("say.mp3")   
 playsound("say.mp3")
 sleep(2)
 os.remove("say.mp3")
-try:
-    os.remove("say.mp3")
-except:
-    pass
 
