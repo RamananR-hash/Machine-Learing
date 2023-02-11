@@ -20,7 +20,7 @@ with sr.Microphone() as source:
 
 completions = openai.Completion.create(
     engine="text-davinci-002",
-    prompt=tetx,
+    prompt=text,
     max_tokens=1024,
     n=1,
     stop=None,
