@@ -26,7 +26,7 @@ COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 
 print("[INFO] starting video stream...")
-vs = VideoStream(src="rtsp://admin:VOTPL@123@192.168.1.30:554//cam/realmonitor?channel=1&subtype=00&authbasic=[AUTH]").start()
+vs = VideoStream(src=0).start()
 time.sleep(2.0)
 fps = FPS().start()
 
