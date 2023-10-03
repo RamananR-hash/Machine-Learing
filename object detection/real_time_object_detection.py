@@ -3,19 +3,15 @@
 from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
-import argparse
 import imutils
 import time
 import cv2
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--prototxt", required=True,
-	help="path to Caffe 'deploy' prototxt file")
-ap.add_argument("-m", "--model", required=True,
-	help="path to Caffe pre-trained model")
-ap.add_argument("-c", "--confidence", type=float, default=0.2,
-	help="minimum probability to filter weak detections")
-args = vars(ap.parse_args())
+# Replace these lines with the path to your Caffe model and prototxt file
+prototxt_path = "MobileNetSSD_deploy.prototxt.txt"
+model_path = "MobileNetSSD_deploy.caffemodel"
+
+confidence_threshold = 0.2
 
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 	"bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
@@ -23,10 +19,10 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 	"sofa", "train", "tvmonitor"]
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
-net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
+net = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
 
 print("[INFO] starting video stream...")
-vs = VideoStream(src=0).start()
+vs = VideoStream(src="rtsp://admin:VOTPL@123@192.168.1.30:554//cam/realmonitor?channel=1&subtype=00&authbasic=[AUTH]").start()
 time.sleep(2.0)
 fps = FPS().start()
 
@@ -45,7 +41,7 @@ while True:
 	for i in np.arange(0, detections.shape[2]):
 		confidence = detections[0, 0, i, 2]
 
-		if confidence > args["confidence"]:
+		if confidence > confidence_threshold:
 
 			idx = int(detections[0, 0, i, 1])
 			box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -59,7 +55,6 @@ while True:
 			cv2.putText(frame, label, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 
-
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
@@ -72,9 +67,5 @@ fps.stop()
 print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
 print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
-
 cv2.destroyAllWindows()
 vs.stop()
-
-# to test 
-# python real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel
